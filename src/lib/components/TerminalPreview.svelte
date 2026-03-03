@@ -2,6 +2,7 @@
 	import type { ITerm2Profile } from '$lib/types/profile';
 	import { ANSI_COLOR_KEYS } from '$lib/types/profile';
 	import { colorToCSS } from '$lib/utils/color';
+	import { maskCommand } from '$lib/utils/mask';
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
 
@@ -28,7 +29,7 @@
 	);
 
 	let command = $derived(
-		profile.Command ? profile.Command.slice(0, 40) : 'bash'
+		profile.Command ? maskCommand(profile.Command).slice(0, 40) : 'bash'
 	);
 
 	let fontName = $derived.by(() => {
