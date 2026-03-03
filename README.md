@@ -2,6 +2,8 @@
 
 A visual web editor for iTerm2 Dynamic Profiles JSON files. Upload your profiles, preview color themes, edit settings, and download the modified file. Everything runs entirely in your browser.
 
+**Live site:** https://iterm2-profile-editor.agagroup.workers.dev
+
 ![iTerm2 Profile Editor](iTerm2-Profile-Editor-03-03-2026_03_20_PM.png)
 
 ## Features
