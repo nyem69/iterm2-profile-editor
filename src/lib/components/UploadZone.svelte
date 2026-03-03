@@ -9,17 +9,6 @@
 	let error = $state('');
 	let fileInput = $state<HTMLInputElement | null>(null);
 
-	$effect(() => {
-		if (!fileInput) return;
-		const handler = (e: Event) => {
-			const input = e.target as HTMLInputElement;
-			const file = input.files?.[0];
-			if (file) processFile(file);
-		};
-		fileInput.addEventListener('change', handler);
-		return () => fileInput?.removeEventListener('change', handler);
-	});
-
 	function processFile(file: File) {
 		error = '';
 		const reader = new FileReader();
@@ -34,8 +23,14 @@
 			} catch {
 				error = 'Invalid JSON file. Please upload a valid iTerm2 profiles JSON.';
 			}
+			if (fileInput) fileInput.value = '';
 		};
 		reader.readAsText(file);
+	}
+
+	function handleFileChange(e: Event) {
+		const file = (e.target as HTMLInputElement).files?.[0];
+		if (file) processFile(file);
 	}
 
 	function handleDrop(e: DragEvent) {
@@ -63,6 +58,7 @@
 			: 'border-muted-foreground/25 hover:border-muted-foreground/50'}"
 		role="button"
 		tabindex="0"
+		aria-label="Upload iTerm2 profiles JSON file"
 		ondrop={handleDrop}
 		ondragover={handleDragOver}
 		ondragleave={handleDragLeave}
@@ -83,6 +79,7 @@
 				type="file"
 				accept=".json"
 				class="hidden"
+				onchange={handleFileChange}
 			/>
 			{#if error}
 				<p class="text-sm text-destructive">{error}</p>

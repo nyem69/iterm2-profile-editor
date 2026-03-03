@@ -5,7 +5,9 @@
 	import { Tabs, TabsContent, TabsList, TabsTrigger } from '$lib/components/ui/tabs/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
-	import { ArrowLeft, Copy, Trash2 } from '@lucide/svelte';
+	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
+	import Copy from '@lucide/svelte/icons/copy';
+	import Trash2 from '@lucide/svelte/icons/trash-2';
 	import { colorToCSS } from '$lib/utils/color';
 	import { ANSI_COLOR_KEYS, ANSI_COLOR_NAMES } from '$lib/types/profile';
 	import ColorEditor from '$lib/components/ColorEditor.svelte';
@@ -15,9 +17,9 @@
 	let guid = $derived(page.params.guid ?? '');
 	let profile = $derived(profileStore.getByGuid(guid));
 
-	// Redirect if profile not found
+	// Redirect if profile not found or no profiles loaded
 	$effect(() => {
-		if (!guid || (profileStore.profiles.length > 0 && !profile)) {
+		if (!guid || !profile) {
 			goto('/');
 		}
 	});

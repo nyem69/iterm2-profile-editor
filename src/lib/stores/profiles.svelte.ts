@@ -103,6 +103,7 @@ class ProfileStore {
 		if (idx !== -1) {
 			this.profiles.splice(idx, 1);
 			this.selectedIds.delete(guid);
+			this.selectedIds = new Set(this.selectedIds);
 			this.saveToLocalStorage();
 		}
 	}
@@ -111,7 +112,13 @@ class ProfileStore {
 	update(guid: string, changes: Partial<ITerm2Profile>) {
 		const profile = this.getByGuid(guid);
 		if (!profile) return;
-		Object.assign(profile, changes);
+		for (const [key, value] of Object.entries(changes)) {
+			if (value === undefined) {
+				delete (profile as Record<string, unknown>)[key];
+			} else {
+				(profile as Record<string, unknown>)[key] = value;
+			}
+		}
 		this.saveToLocalStorage();
 	}
 
@@ -176,10 +183,19 @@ class ProfileStore {
 	}
 
 	bulkApplyTheme(presetName: string) {
+		const preset = COLOR_PRESETS[presetName];
+		if (!preset) return;
 		for (const guid of this.selectedIds) {
-			this.applyTheme(guid, presetName);
+			const profile = this.getByGuid(guid);
+			if (!profile) continue;
+			for (const key of ALL_COLOR_KEYS) {
+				if (preset[key]) {
+					(profile as Record<string, unknown>)[key] = { ...preset[key] };
+				}
+			}
 		}
 		this.selectedIds = new Set();
+		this.saveToLocalStorage();
 	}
 
 	// --- Persistence ---
@@ -229,7 +245,7 @@ class ProfileStore {
 		a.href = url;
 		a.download = 'iterm2-profiles.json';
 		a.click();
-		URL.revokeObjectURL(url);
+		setTimeout(() => URL.revokeObjectURL(url), 1000);
 	}
 }
 
