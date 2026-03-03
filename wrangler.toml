@@ -1,5 +1,6 @@
 name = "iterm2-profile-editor"
 compatibility_date = "2025-01-01"
+main = "worker-entry.ts"
 
 [assets]
 directory = ".svelte-kit/cloudflare"
