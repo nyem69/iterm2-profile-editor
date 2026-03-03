@@ -2,5 +2,6 @@
 node_modules/
 .svelte-kit/
 build/
+worker-entry.ts
 .env
 .env.*
