@@ -6,9 +6,12 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import TerminalPreview from './TerminalPreview.svelte';
 	import TagGroup from './TagGroup.svelte';
+	import BulkActions from './BulkActions.svelte';
 	import Search from '@lucide/svelte/icons/search';
 	import Plus from '@lucide/svelte/icons/plus';
 	import Download from '@lucide/svelte/icons/download';
+
+	let hasSelection = $derived(profileStore.selectedIds.size > 0);
 
 	function handleAdd() {
 		const guid = profileStore.add();
@@ -77,8 +80,15 @@
 	</div>
 </div>
 
+<!-- Bulk Actions bar: desktop inline position -->
+{#if hasSelection}
+	<div class="hidden md:block container px-4 pt-3">
+		<BulkActions />
+	</div>
+{/if}
+
 <!-- Profile grid -->
-<div class="container px-4 py-6">
+<div class="container px-4 py-6" class:pb-24={hasSelection}>
 	{#if profileStore.filtered.length === 0}
 		<div class="flex items-center justify-center py-16 text-muted-foreground">
 			<p>No profiles match your search</p>
@@ -100,3 +110,10 @@
 		{/each}
 	{/if}
 </div>
+
+<!-- Bulk Actions bar: mobile fixed bottom position -->
+{#if hasSelection}
+	<div class="md:hidden">
+		<BulkActions />
+	</div>
+{/if}
