@@ -5,6 +5,7 @@
 	import { maskCommand } from '$lib/utils/mask';
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
+	import Pencil from '@lucide/svelte/icons/pencil';
 
 	let {
 		profile,
@@ -111,6 +112,13 @@
 		{#if fontName}
 			<span class="ml-auto text-[10px] text-muted-foreground">{fontName}</span>
 		{/if}
+	</div>
+
+	<!-- Edit icon overlay -->
+	<div class="absolute inset-0 flex items-center justify-center bg-black/0 transition-all group-hover:bg-black/30 pointer-events-none">
+		<div class="rounded-full bg-white/90 p-2 opacity-0 shadow-md transition-opacity group-hover:opacity-100">
+			<Pencil class="h-5 w-5 text-gray-700" />
+		</div>
 	</div>
 
 	<!-- Checkbox overlay -->
