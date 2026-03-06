@@ -103,6 +103,7 @@
 							selected={profileStore.selectedIds.has(profile.Guid)}
 							onselect={() => profileStore.toggleSelect(profile.Guid)}
 							onclick={() => goto(`/profile/${profile.Guid}`)}
+							oncopy={() => profileStore.copy(profile.Guid)}
 						/>
 					{/each}
 				</div>

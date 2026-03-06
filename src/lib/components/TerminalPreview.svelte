@@ -6,18 +6,26 @@
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
 	import Pencil from '@lucide/svelte/icons/pencil';
+	import Copy from '@lucide/svelte/icons/copy';
 
 	let {
 		profile,
 		selected = false,
 		onselect,
 		onclick,
+		oncopy,
 	}: {
 		profile: ITerm2Profile;
 		selected: boolean;
 		onselect: () => void;
 		onclick: () => void;
+		oncopy: () => void;
 	} = $props();
+
+	function handleCopyClick(e: MouseEvent) {
+		e.stopPropagation();
+		oncopy();
+	}
 
 	const DEFAULT_BG = '#1a1b26';
 	const DEFAULT_FG = '#c0caf5';
@@ -121,15 +129,19 @@
 		</div>
 	</div>
 
-	<!-- Checkbox overlay -->
+	<!-- Action overlays -->
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div
-		class="absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100 {selected
-			? 'opacity-100'
-			: ''}"
-		onclick={handleCheckboxClick}
-	>
-		<Checkbox checked={selected} />
+	<div class="absolute right-2 top-2 flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 {selected ? 'opacity-100' : ''}">
+		<button
+			class="rounded-md bg-white/90 p-1.5 shadow-sm transition-colors hover:bg-white dark:bg-gray-800/90 dark:hover:bg-gray-700"
+			title="Duplicate profile"
+			onclick={handleCopyClick}
+		>
+			<Copy class="h-3.5 w-3.5 text-gray-600 dark:text-gray-300" />
+		</button>
+		<div onclick={handleCheckboxClick}>
+			<Checkbox checked={selected} />
+		</div>
 	</div>
 </div>
