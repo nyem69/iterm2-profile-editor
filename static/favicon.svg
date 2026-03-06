@@ -1,7 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <rect width="32" height="32" rx="6" fill="#1e1e2e"/>
-  <circle cx="6" cy="6" r="2" fill="#ff5f57"/>
-  <circle cx="12" cy="6" r="2" fill="#febc2e"/>
-  <circle cx="18" cy="6" r="2" fill="#28c840"/>
-  <text x="5" y="23" font-family="monospace" font-size="14" fill="#cdd6f4">$_</text>
+  <circle cx="7" cy="7" r="2" fill="#ff5f57"/>
+  <circle cx="13" cy="7" r="2" fill="#febc2e"/>
+  <circle cx="19" cy="7" r="2" fill="#28c840"/>
+  <rect x="6" y="14" width="8" height="2" rx="1" fill="#a6e3a1"/>
+  <rect x="6" y="19" width="14" height="2" rx="1" fill="#cdd6f4"/>
+  <rect x="6" y="24" width="10" height="2" rx="1" fill="#89b4fa"/>
 </svg>
