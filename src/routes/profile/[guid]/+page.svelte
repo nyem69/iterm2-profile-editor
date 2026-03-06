@@ -28,7 +28,7 @@
 
 	function handleDelete() {
 		profileStore.delete(guid);
-		goto('/');
+		history.back();
 	}
 
 	function handleCopy() {
@@ -58,7 +58,7 @@
 	<div class="container px-4 py-4 max-w-4xl mx-auto">
 		<!-- Top Bar -->
 		<div class="flex items-center gap-3 mb-4">
-			<Button variant="ghost" size="icon" onclick={() => goto('/')}>
+			<Button variant="ghost" size="icon" onclick={() => history.back()}>
 				<ArrowLeft class="h-5 w-5" />
 				<span class="sr-only">Back</span>
 			</Button>
