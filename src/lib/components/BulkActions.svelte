@@ -52,9 +52,9 @@
 	}
 </script>
 
-<!-- Desktop: inline bar / Mobile: fixed bottom bar -->
+<!-- Sticky bottom bar -->
 <div
-	class="fixed inset-x-0 bottom-0 z-50 border-t bg-primary text-primary-foreground shadow-lg md:static md:inset-auto md:z-auto md:border-t-0 md:shadow-none md:rounded-lg"
+	class="fixed inset-x-0 bottom-0 z-50 border-t bg-primary text-primary-foreground shadow-lg"
 >
 	<div class="container flex flex-wrap items-center gap-2 px-4 py-3 md:px-3 md:py-2">
 		<!-- Selection count -->

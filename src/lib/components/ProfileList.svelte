@@ -80,13 +80,6 @@
 	</div>
 </div>
 
-<!-- Bulk Actions bar: desktop inline position -->
-{#if hasSelection}
-	<div class="hidden md:block container px-4 pt-3">
-		<BulkActions />
-	</div>
-{/if}
-
 <!-- Profile grid -->
 <div class="container px-4 py-6" class:pb-24={hasSelection}>
 	{#if profileStore.filtered.length === 0}
@@ -112,9 +105,7 @@
 	{/if}
 </div>
 
-<!-- Bulk Actions bar: mobile fixed bottom position -->
+<!-- Bulk Actions: sticky bottom bar -->
 {#if hasSelection}
-	<div class="md:hidden">
-		<BulkActions />
-	</div>
+	<BulkActions />
 {/if}
