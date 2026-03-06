@@ -1,3 +1,8 @@
+<script lang="ts" module>
+	// Persist expanded state across component mounts (survives navigation)
+	let expandedTags = $state<Record<string, boolean>>({});
+</script>
+
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { profileStore } from '$lib/stores/profiles.svelte';
@@ -13,9 +18,6 @@
 	import ChevronsUpDown from '@lucide/svelte/icons/chevrons-up-down';
 
 	let hasSelection = $derived(profileStore.selectedIds.size > 0);
-
-	// Track expanded state per tag
-	let expandedTags = $state<Record<string, boolean>>({});
 	let allExpanded = $derived.by(() => {
 		const tags = [...profileStore.grouped.keys()];
 		return tags.length > 0 && tags.every((tag) => expandedTags[tag]);
