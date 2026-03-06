@@ -21,8 +21,8 @@
 		return tags.length > 0 && tags.every((tag) => expandedTags[tag]);
 	});
 
-	// Initialize default expanded state when groups change
-	$effect(() => {
+	// Initialize default expanded state before render
+	$effect.pre(() => {
 		for (const tag of profileStore.grouped.keys()) {
 			if (!(tag in expandedTags)) {
 				expandedTags[tag] = tag === 'Terminal Defaults';
