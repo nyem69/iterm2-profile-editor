@@ -7,15 +7,13 @@
 		tag,
 		count,
 		children,
-		defaultExpanded = false,
+		expanded = $bindable(false),
 	}: {
 		tag: string;
 		count: number;
 		children: Snippet;
-		defaultExpanded?: boolean;
+		expanded?: boolean;
 	} = $props();
-
-	let expanded = $state(defaultExpanded);
 </script>
 
 <div class="mb-4">

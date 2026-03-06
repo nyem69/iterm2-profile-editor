@@ -10,8 +10,32 @@
 	import Search from '@lucide/svelte/icons/search';
 	import Plus from '@lucide/svelte/icons/plus';
 	import Download from '@lucide/svelte/icons/download';
+	import ChevronsUpDown from '@lucide/svelte/icons/chevrons-up-down';
 
 	let hasSelection = $derived(profileStore.selectedIds.size > 0);
+
+	// Track expanded state per tag
+	let expandedTags = $state<Record<string, boolean>>({});
+	let allExpanded = $derived.by(() => {
+		const tags = [...profileStore.grouped.keys()];
+		return tags.length > 0 && tags.every((tag) => expandedTags[tag]);
+	});
+
+	// Initialize default expanded state when groups change
+	$effect(() => {
+		for (const tag of profileStore.grouped.keys()) {
+			if (!(tag in expandedTags)) {
+				expandedTags[tag] = tag === 'Terminal Defaults';
+			}
+		}
+	});
+
+	function toggleAll() {
+		const newState = !allExpanded;
+		for (const tag of profileStore.grouped.keys()) {
+			expandedTags[tag] = newState;
+		}
+	}
 
 	function handleAdd() {
 		const guid = profileStore.add();
@@ -62,6 +86,9 @@
 
 			<!-- Actions -->
 			<div class="flex items-center gap-2">
+				<Button variant="outline" size="sm" onclick={toggleAll} title={allExpanded ? 'Collapse all' : 'Expand all'}>
+					<ChevronsUpDown class="size-4" />
+				</Button>
 				<Button variant="outline" size="sm" onclick={handleAdd}>
 					<Plus class="size-4" />
 					<span class="hidden sm:inline">Add Profile</span>
@@ -88,7 +115,7 @@
 		</div>
 	{:else}
 		{#each [...profileStore.grouped.entries()] as [tag, profiles]}
-			<TagGroup {tag} count={profiles.length} defaultExpanded={tag === 'Terminal Defaults'}>
+			<TagGroup {tag} count={profiles.length} bind:expanded={expandedTags[tag]}>
 				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 					{#each profiles as profile (profile.Guid)}
 						<TerminalPreview
