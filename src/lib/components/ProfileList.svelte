@@ -88,7 +88,7 @@
 		</div>
 	{:else}
 		{#each [...profileStore.grouped.entries()] as [tag, profiles]}
-			<TagGroup {tag} count={profiles.length}>
+			<TagGroup {tag} count={profiles.length} defaultExpanded={tag === 'Terminal Defaults'}>
 				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 					{#each profiles as profile (profile.Guid)}
 						<TerminalPreview

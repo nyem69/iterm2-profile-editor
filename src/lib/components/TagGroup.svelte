@@ -7,13 +7,15 @@
 		tag,
 		count,
 		children,
+		defaultExpanded = false,
 	}: {
 		tag: string;
 		count: number;
 		children: Snippet;
+		defaultExpanded?: boolean;
 	} = $props();
 
-	let expanded = $state(true);
+	let expanded = $state(defaultExpanded);
 </script>
 
 <div class="mb-4">
