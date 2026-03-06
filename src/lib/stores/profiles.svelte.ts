@@ -88,7 +88,7 @@ class ProfileStore {
 		const source = this.getByGuid(guid);
 		if (!source) return;
 		const newGuid = crypto.randomUUID().toUpperCase();
-		const copy = structuredClone(source);
+		const copy: ITerm2Profile = JSON.parse(JSON.stringify(source));
 		copy.Guid = newGuid;
 		copy.Name = `${source.Name} (copy)`;
 		const idx = this.profiles.indexOf(source);
