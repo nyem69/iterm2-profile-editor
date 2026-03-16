@@ -124,14 +124,12 @@
 
 	<!-- Edit icon overlay -->
 	<div class="absolute inset-0 flex items-center justify-center bg-black/0 transition-all group-hover:bg-black/30 pointer-events-none">
-		<div class="rounded-full bg-white/90 p-2 opacity-0 shadow-md transition-opacity group-hover:opacity-100">
-			<Pencil class="h-5 w-5 text-gray-700" />
+		<div class="rounded-full bg-white/90 dark:bg-gray-800/90 p-2 opacity-0 shadow-md transition-opacity group-hover:opacity-100">
+			<Pencil class="h-5 w-5 text-gray-700 dark:text-gray-200" />
 		</div>
 	</div>
 
 	<!-- Action overlays -->
-	<!-- svelte-ignore a11y_click_events_have_key_events -->
-	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div class="absolute right-2 top-2 flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 {selected ? 'opacity-100' : ''}">
 		<button
 			class="rounded-md bg-white/90 p-1.5 shadow-sm transition-colors hover:bg-white dark:bg-gray-800/90 dark:hover:bg-gray-700"
@@ -140,8 +138,11 @@
 		>
 			<Copy class="h-3.5 w-3.5 text-gray-600 dark:text-gray-300" />
 		</button>
-		<div onclick={handleCheckboxClick}>
+		<button
+			class="cursor-pointer border-0 bg-transparent p-0"
+			onclick={handleCheckboxClick}
+		>
 			<Checkbox checked={selected} />
-		</div>
+		</button>
 	</div>
 </div>

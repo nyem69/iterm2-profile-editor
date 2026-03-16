@@ -36,11 +36,9 @@
 			: 'grid-rows-[0fr]'}"
 	>
 		<div class="overflow-hidden">
-			{#if expanded}
-				<div class="pt-2">
-					{@render children()}
-				</div>
-			{/if}
+			<div class="pt-2">
+				{@render children()}
+			</div>
 		</div>
 	</div>
 </div>

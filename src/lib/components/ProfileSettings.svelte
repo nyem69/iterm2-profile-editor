@@ -6,6 +6,7 @@
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import { Separator } from '$lib/components/ui/separator/index.js';
 	import * as Select from '$lib/components/ui/select/index.js';
+	import { toast } from 'svelte-sonner';
 
 	let { guid }: { guid: string } = $props();
 
@@ -13,6 +14,7 @@
 
 	// Local state for tag input
 	let tagInput = $state('');
+	let nameEmpty = $state(false);
 
 	// Derived values for bound inputs
 	let name = $derived(profile?.Name ?? '');
@@ -61,8 +63,22 @@
 				id="profile-name"
 				type="text"
 				value={name}
-				oninput={(e) => updateField({ Name: e.currentTarget.value })}
+				class={nameEmpty ? 'border-red-500' : ''}
+				oninput={(e) => {
+					const val = e.currentTarget.value;
+					nameEmpty = val.trim() === '';
+					updateField({ Name: val });
+				}}
+				onblur={(e) => {
+					if (e.currentTarget.value.trim() === '') {
+						updateField({ Name: 'Untitled' });
+						nameEmpty = false;
+					}
+				}}
 			/>
+			{#if nameEmpty}
+				<p class="text-xs text-red-500">Name cannot be empty. It will be set to "Untitled" on blur.</p>
+			{/if}
 		</div>
 
 		<!-- Tags -->
@@ -135,8 +151,14 @@
 			<Input
 				id="columns"
 				type="number"
+				min={1}
+				max={999}
 				value={columns}
-				oninput={(e) => updateField({ Columns: Number(e.currentTarget.value) })}
+				oninput={(e) => {
+					const val = Number(e.currentTarget.value);
+					if (isNaN(val) || e.currentTarget.value === '') return;
+					updateField({ Columns: Math.min(999, Math.max(1, val)) });
+				}}
 			/>
 		</div>
 
@@ -146,8 +168,14 @@
 			<Input
 				id="rows"
 				type="number"
+				min={1}
+				max={999}
 				value={rows}
-				oninput={(e) => updateField({ Rows: Number(e.currentTarget.value) })}
+				oninput={(e) => {
+					const val = Number(e.currentTarget.value);
+					if (isNaN(val) || e.currentTarget.value === '') return;
+					updateField({ Rows: Math.min(999, Math.max(1, val)) });
+				}}
 			/>
 		</div>
 
@@ -157,9 +185,15 @@
 			<Input
 				id="scrollback-lines"
 				type="number"
+				min={0}
+				max={100000}
 				value={scrollbackLines}
 				disabled={unlimitedScrollback}
-				oninput={(e) => updateField({ 'Scrollback Lines': Number(e.currentTarget.value) })}
+				oninput={(e) => {
+					const val = Number(e.currentTarget.value);
+					if (isNaN(val) || e.currentTarget.value === '') return;
+					updateField({ 'Scrollback Lines': Math.min(100000, Math.max(0, val)) });
+				}}
 			/>
 		</div>
 

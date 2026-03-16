@@ -3,6 +3,19 @@ import { ALL_COLOR_KEYS } from '$lib/types/profile';
 import { COLOR_PRESETS } from '$lib/data/color-presets';
 
 const STORAGE_KEY = 'iterm2-profile-editor';
+const MAX_PROFILES = 1000;
+
+function validateProfiles(profiles: ITerm2Profile[]): ITerm2Profile[] {
+	return profiles
+		.filter((p) => typeof p.Name === 'string' && p.Name.length > 0)
+		.map((p) => {
+			if (typeof p.Guid !== 'string' || p.Guid.length === 0) {
+				return { ...p, Guid: crypto.randomUUID().toUpperCase() };
+			}
+			return p;
+		})
+		.slice(0, MAX_PROFILES);
+}
 
 class ProfileStore {
 	profiles = $state<ITerm2Profile[]>([]);
@@ -10,6 +23,10 @@ class ProfileStore {
 	searchQuery = $state('');
 	filterTag = $state<string | null>(null);
 	hasUnsavedData = $state(false);
+	saveError = $state<string | null>(null);
+	initialized = $state(false);
+
+	private _saveTimer: ReturnType<typeof setTimeout> | undefined;
 
 	/** All unique tags across profiles */
 	get allTags(): string[] {
@@ -56,10 +73,11 @@ class ProfileStore {
 
 	/** Load profiles from JSON */
 	load(data: ITerm2ProfilesFile) {
-		this.profiles = data.Profiles;
+		this.profiles = validateProfiles(data.Profiles);
 		this.selectedIds = new Set();
 		this.hasUnsavedData = true;
 		this.saveToLocalStorage();
+		this.initialized = true;
 	}
 
 	/** Add a new profile */
@@ -119,7 +137,7 @@ class ProfileStore {
 				(profile as Record<string, unknown>)[key] = value;
 			}
 		}
-		this.saveToLocalStorage();
+		this._debouncedSave();
 	}
 
 	/** Set a single color on a profile */
@@ -127,7 +145,7 @@ class ProfileStore {
 		const profile = this.getByGuid(guid);
 		if (!profile) return;
 		(profile as Record<string, unknown>)[key] = color;
-		this.saveToLocalStorage();
+		this._debouncedSave();
 	}
 
 	/** Apply a color preset to a profile */
@@ -141,7 +159,7 @@ class ProfileStore {
 				(profile as Record<string, unknown>)[key] = { ...preset[key] };
 			}
 		}
-		this.saveToLocalStorage();
+		this._debouncedSave();
 	}
 
 	// --- Bulk operations ---
@@ -200,28 +218,41 @@ class ProfileStore {
 
 	// --- Persistence ---
 
+	private _debouncedSave() {
+		if (this._saveTimer) clearTimeout(this._saveTimer);
+		this._saveTimer = setTimeout(() => {
+			this.saveToLocalStorage();
+		}, 500);
+	}
+
 	saveToLocalStorage() {
 		this.hasUnsavedData = true;
 		try {
 			localStorage.setItem(STORAGE_KEY, JSON.stringify({ Profiles: this.profiles }));
-		} catch {
-			// localStorage full or unavailable
+			this.saveError = null;
+		} catch (e) {
+			this.saveError = e instanceof Error ? e.message : 'Failed to save to localStorage';
 		}
 	}
 
 	restoreFromLocalStorage(): boolean {
 		try {
 			const raw = localStorage.getItem(STORAGE_KEY);
-			if (!raw) return false;
+			if (!raw) {
+				this.initialized = true;
+				return false;
+			}
 			const data = JSON.parse(raw) as ITerm2ProfilesFile;
 			if (data.Profiles?.length > 0) {
-				this.profiles = data.Profiles;
+				this.profiles = validateProfiles(data.Profiles);
 				this.hasUnsavedData = true;
+				this.initialized = true;
 				return true;
 			}
 		} catch {
 			// corrupt data
 		}
+		this.initialized = true;
 		return false;
 	}
 

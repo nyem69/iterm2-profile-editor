@@ -19,6 +19,16 @@
 		hasLocalData = localStorage.getItem('iterm2-profile-editor') !== null;
 	});
 
+	$effect(() => {
+		if (profileStore.profiles.length > 0) {
+			const handler = (e: BeforeUnloadEvent) => {
+				e.preventDefault();
+			};
+			window.addEventListener('beforeunload', handler);
+			return () => window.removeEventListener('beforeunload', handler);
+		}
+	});
+
 	function handleLoad(data: ITerm2ProfilesFile) {
 		profileStore.load(data);
 	}

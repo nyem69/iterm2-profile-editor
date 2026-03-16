@@ -11,6 +11,7 @@
 	import Tags from '@lucide/svelte/icons/tags';
 	import CheckCheck from '@lucide/svelte/icons/check-check';
 	import X from '@lucide/svelte/icons/x';
+	import { toast } from 'svelte-sonner';
 
 	let deleteDialogOpen = $state(false);
 	let tagDialogOpen = $state(false);
@@ -31,8 +32,10 @@
 	}
 
 	function handleConfirmDelete() {
+		const count = profileStore.selectedIds.size;
 		profileStore.bulkDelete();
 		deleteDialogOpen = false;
+		toast.success(`Deleted ${count} profile(s)`);
 	}
 
 	function handleApplyTags() {
@@ -41,7 +44,9 @@
 			.map((t) => t.trim())
 			.filter((t) => t.length > 0);
 		if (tags.length > 0) {
+			const count = profileStore.selectedIds.size;
 			profileStore.bulkApplyTags(tags);
+			toast.success(`Added tags to ${count} profile(s)`);
 		}
 		tagInput = '';
 		tagDialogOpen = false;
@@ -49,6 +54,7 @@
 
 	function handleApplyTheme(preset: string) {
 		profileStore.bulkApplyTheme(preset);
+		toast.success(`Applied ${preset} theme`);
 	}
 </script>
 
@@ -67,6 +73,7 @@
 			variant="secondary"
 			size="sm"
 			onclick={handleToggleSelectAll}
+			aria-label={allFilteredSelected ? 'Deselect all' : 'Select all'}
 		>
 			{#if allFilteredSelected}
 				<X class="size-4" />
@@ -81,7 +88,7 @@
 		<AlertDialog.Root bind:open={deleteDialogOpen}>
 			<AlertDialog.Trigger>
 				{#snippet child({ props })}
-					<Button variant="destructive" size="sm" {...props}>
+					<Button variant="destructive" size="sm" {...props} aria-label="Delete selected">
 						<Trash2 class="size-4" />
 						<span class="hidden sm:inline">Delete</span>
 					</Button>
@@ -105,7 +112,7 @@
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger>
 				{#snippet child({ props })}
-					<Button variant="secondary" size="sm" {...props}>
+					<Button variant="secondary" size="sm" {...props} aria-label="Apply theme">
 						<Palette class="size-4" />
 						<span class="hidden sm:inline">Apply Theme</span>
 					</Button>
@@ -124,7 +131,7 @@
 		<Dialog.Root bind:open={tagDialogOpen}>
 			<Dialog.Trigger>
 				{#snippet child({ props })}
-					<Button variant="secondary" size="sm" {...props}>
+					<Button variant="secondary" size="sm" {...props} aria-label="Add tags">
 						<Tags class="size-4" />
 						<span class="hidden sm:inline">Add Tags</span>
 					</Button>

@@ -4,6 +4,7 @@
 </script>
 
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { profileStore } from '$lib/stores/profiles.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
@@ -26,9 +27,11 @@
 	// Initialize default expanded state before render
 	$effect.pre(() => {
 		for (const tag of profileStore.grouped.keys()) {
-			if (!(tag in expandedTags)) {
-				expandedTags[tag] = tag === 'Terminal Defaults';
-			}
+			untrack(() => {
+				if (!(tag in expandedTags)) {
+					expandedTags[tag] = tag === 'Terminal Defaults';
+				}
+			});
 		}
 	});
 

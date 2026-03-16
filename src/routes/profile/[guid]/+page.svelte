@@ -19,7 +19,7 @@
 
 	// Redirect if profile not found or no profiles loaded
 	$effect(() => {
-		if (!guid || !profile) {
+		if (profileStore.initialized && (!guid || !profile)) {
 			goto('/');
 		}
 	});
@@ -28,7 +28,7 @@
 
 	function handleDelete() {
 		profileStore.delete(guid);
-		history.back();
+		goto('/', { replaceState: true });
 	}
 
 	function handleCopy() {

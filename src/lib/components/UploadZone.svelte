@@ -1,7 +1,8 @@
 <script lang="ts">
-	import type { ITerm2ProfilesFile } from '$lib/types/profile';
+	import type { ITerm2ProfilesFile, ITerm2Profile } from '$lib/types/profile';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import Upload from '@lucide/svelte/icons/upload';
+	import { toast } from 'svelte-sonner';
 
 	let { onload }: { onload: (data: ITerm2ProfilesFile) => void } = $props();
 
@@ -19,7 +20,24 @@
 					error = 'Invalid file: missing Profiles array.';
 					return;
 				}
-				onload(json as ITerm2ProfilesFile);
+
+				const allProfiles: ITerm2Profile[] = json.Profiles;
+				const validProfiles = allProfiles.filter(
+					(p) => typeof p.Name === 'string' && p.Name.length > 0 && typeof p.Guid === 'string' && p.Guid.length > 0
+				);
+				const skipped = allProfiles.length - validProfiles.length;
+
+				if (validProfiles.length === 0) {
+					error = 'No valid profiles found. Profiles must have a Name and Guid.';
+					return;
+				}
+
+				if (skipped > 0) {
+					toast.warning(`Skipped ${skipped} profile${skipped > 1 ? 's' : ''} missing Name or Guid.`);
+				}
+
+				onload({ Profiles: validProfiles });
+				toast.success(`Loaded ${validProfiles.length} profile${validProfiles.length > 1 ? 's' : ''}.`);
 			} catch {
 				error = 'Invalid JSON file. Please upload a valid iTerm2 profiles JSON.';
 			}

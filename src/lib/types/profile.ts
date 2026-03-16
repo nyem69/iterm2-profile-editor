@@ -3,7 +3,7 @@ export interface ITerm2Color {
 	'Green Component': number;
 	'Blue Component': number;
 	'Alpha Component': number;
-	'Color Space': 'sRGB';
+	'Color Space': string;
 }
 
 export const ANSI_COLOR_KEYS = [
