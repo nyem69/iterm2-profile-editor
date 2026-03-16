@@ -4,7 +4,7 @@
 ![Svelte 5](https://img.shields.io/badge/Svelte-5-ff3e00?logo=svelte&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss&logoColor=white)
 ![Cloudflare Workers](https://img.shields.io/badge/Cloudflare_Workers-f38020?logo=cloudflareworkers&logoColor=white)
-![License](https://img.shields.io/badge/License-AGPLv3-blue)
+![License](https://img.shields.io/badge/License-MIT-blue)
 
 A visual web editor for iTerm2 Dynamic Profiles JSON files. Upload your profiles, preview color themes, edit settings, and download the modified file. Everything runs entirely in your browser.
 
@@ -217,4 +217,4 @@ All processing happens entirely in your browser. No data is sent to any server. 
 
 ## License
 
-[AGPLv3](LICENSE)
+[MIT](LICENSE)
