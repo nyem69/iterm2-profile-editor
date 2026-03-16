@@ -27,7 +27,7 @@ export function colorToCSS(color: ITerm2Color): string {
 	const r = Math.min(255, Math.max(0, Math.round((Number(color['Red Component']) || 0) * 255)));
 	const g = Math.min(255, Math.max(0, Math.round((Number(color['Green Component']) || 0) * 255)));
 	const b = Math.min(255, Math.max(0, Math.round((Number(color['Blue Component']) || 0) * 255)));
-	const a = Math.min(1, Math.max(0, Number(color['Alpha Component']) ?? 1));
+	const raw = Number(color['Alpha Component']); const a = Number.isNaN(raw) ? 1 : Math.min(1, Math.max(0, raw));
 	if (a < 1) return `rgba(${r}, ${g}, ${b}, ${a})`;
 	return `rgb(${r}, ${g}, ${b})`;
 }

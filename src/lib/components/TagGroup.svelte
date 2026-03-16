@@ -14,6 +14,9 @@
 		children: Snippet;
 		expanded?: boolean;
 	} = $props();
+
+	let hasBeenExpanded = $state(expanded);
+	$effect(() => { if (expanded) hasBeenExpanded = true; });
 </script>
 
 <div class="mb-4">
@@ -36,9 +39,11 @@
 			: 'grid-rows-[0fr]'}"
 	>
 		<div class="overflow-hidden">
-			<div class="pt-2">
-				{@render children()}
-			</div>
+			{#if hasBeenExpanded}
+				<div class="pt-2">
+					{@render children()}
+				</div>
+			{/if}
 		</div>
 	</div>
 </div>

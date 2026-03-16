@@ -20,7 +20,7 @@
 
 	function handleInput(e: Event) {
 		const target = e.target as HTMLInputElement;
-		const newColor = hexToColor(target.value);
+		const newColor = hexToColor(target.value, color?.['Alpha Component'] ?? 1, color?.['Color Space'] ?? 'sRGB');
 		onchange(newColor);
 	}
 </script>

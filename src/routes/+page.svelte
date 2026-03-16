@@ -12,6 +12,7 @@
 	import Layers from '@lucide/svelte/icons/layers';
 	import Pencil from '@lucide/svelte/icons/pencil';
 	import Copy from '@lucide/svelte/icons/copy';
+	import { toast } from 'svelte-sonner';
 
 	let hasLocalData = $state(false);
 
@@ -22,10 +23,17 @@
 	$effect(() => {
 		if (profileStore.profiles.length > 0) {
 			const handler = (e: BeforeUnloadEvent) => {
+				profileStore.flushPendingSave();
 				e.preventDefault();
 			};
 			window.addEventListener('beforeunload', handler);
 			return () => window.removeEventListener('beforeunload', handler);
+		}
+	});
+
+	$effect(() => {
+		if (profileStore.saveError) {
+			toast.error(`Save failed: ${profileStore.saveError}. Download your file to avoid data loss.`);
 		}
 	});
 

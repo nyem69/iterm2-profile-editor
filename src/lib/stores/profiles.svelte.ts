@@ -218,6 +218,14 @@ class ProfileStore {
 
 	// --- Persistence ---
 
+	flushPendingSave() {
+		if (this._saveTimer) {
+			clearTimeout(this._saveTimer);
+			this._saveTimer = undefined;
+			this.saveToLocalStorage();
+		}
+	}
+
 	private _debouncedSave() {
 		if (this._saveTimer) clearTimeout(this._saveTimer);
 		this._saveTimer = setTimeout(() => {

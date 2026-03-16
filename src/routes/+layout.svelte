@@ -6,10 +6,15 @@
 	import Sun from '@lucide/svelte/icons/sun';
 	import Moon from '@lucide/svelte/icons/moon';
 	import Github from '@lucide/svelte/icons/github';
+	import { profileStore } from '$lib/stores/profiles.svelte';
 
 	let { children } = $props();
 
 	let dark = $state(false);
+
+	$effect(() => {
+		profileStore.restoreFromLocalStorage();
+	});
 
 	// Initialize once
 	$effect(() => {

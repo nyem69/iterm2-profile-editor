@@ -23,17 +23,17 @@
 
 				const allProfiles: ITerm2Profile[] = json.Profiles;
 				const validProfiles = allProfiles.filter(
-					(p) => typeof p.Name === 'string' && p.Name.length > 0 && typeof p.Guid === 'string' && p.Guid.length > 0
+					(p: any) => typeof p.Name === 'string' && p.Name.length > 0
 				);
 				const skipped = allProfiles.length - validProfiles.length;
 
 				if (validProfiles.length === 0) {
-					error = 'No valid profiles found. Profiles must have a Name and Guid.';
+					error = 'No valid profiles found. Profiles must have a Name.';
 					return;
 				}
 
 				if (skipped > 0) {
-					toast.warning(`Skipped ${skipped} profile${skipped > 1 ? 's' : ''} missing Name or Guid.`);
+					toast.warning(`Skipped ${skipped} profile${skipped > 1 ? 's' : ''} without a name.`);
 				}
 
 				onload({ Profiles: validProfiles });
