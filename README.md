@@ -14,14 +14,17 @@ A visual web editor for iTerm2 Dynamic Profiles JSON files. Upload your profiles
 
 ## Features
 
-- **Visual preview** — Terminal mockup cards showing background/foreground colors and ANSI color swatches for each profile
+- **Visual preview** — Terminal mockup cards with background/foreground colors, ANSI color swatches, and edit/duplicate overlays on hover
 - **Color theme presets** — Apply Dracula, Solarized, Nord, Monokai, One Dark, Gruvbox, Tokyo Night, or Catppuccin Mocha with one click
-- **Profile management** — Add, copy, delete, and organize profiles by tags
-- **Full settings editor** — Edit colors, fonts, terminal size, cursor, scrollback, commands, and more
-- **Bulk operations** — Select multiple profiles to apply themes, add tags, or delete in batch
-- **Credential masking** — Passwords and tokens in commands are automatically masked in preview cards
-- **Dark/light mode** — Toggle between themes, respects system preference
-- **Auto-save** — Changes persist to browser localStorage, restore on next visit
+- **Color space preservation** — Supports sRGB, Calibrated, and Display P3 color spaces from iTerm2
+- **Profile management** — Add, duplicate, delete, and organize profiles by tags with collapsible groups
+- **Full settings editor** — Edit colors, fonts, terminal size, cursor, scrollback, commands, and more with input validation
+- **Bulk operations** — Select multiple profiles to apply themes, add tags, or delete in batch with a sticky action bar
+- **Credential masking** — Passwords, tokens, and API keys in commands are automatically masked in preview cards
+- **Dark/light mode** — Toggle between themes with system preference detection
+- **Auto-save** — Changes persist to browser localStorage with debounced saves and restore on next visit
+- **Toast notifications** — Visual feedback for all actions (upload, delete, bulk operations, save errors)
+- **Keyboard accessible** — Full keyboard navigation for upload zone, profile selection, and actions
 - **Fully client-side** — No server, no uploads, no tracking. Your data never leaves your browser.
 
 ## Getting Started
@@ -45,11 +48,11 @@ pnpm build
 pnpm preview
 ```
 
-### Deploy to Cloudflare Pages
+### Deploy to Cloudflare Workers
 
 ```bash
 pnpm build
-pnpm dlx wrangler pages deploy .svelte-kit/cloudflare --project-name iterm2-profile-editor
+pnpm dlx wrangler deploy
 ```
 
 ## Usage
@@ -61,7 +64,7 @@ pnpm dlx wrangler pages deploy .svelte-kit/cloudflare --project-name iterm2-prof
 2. **Upload** the JSON file (drag & drop or browse)
 
 3. **Edit** — click any profile card to open the full editor with three tabs:
-   - **Colors** — 21 color slots with pickers, apply presets
+   - **Colors** — 21 color slots with pickers, apply presets, preserves original color space
    - **Settings** — Name, tags, font, terminal size, cursor, scrollback, transparency
    - **Command** — Custom shell command, session close behavior
 
@@ -206,14 +209,15 @@ python3 convert_terminal_to_iterm2.py
 
 ## Tech Stack
 
-- [SvelteKit](https://svelte.dev/docs/kit) + [Svelte 5](https://svelte.dev) (runes mode)
-- [Tailwind CSS 4](https://tailwindcss.com)
-- [shadcn-svelte](https://shadcn-svelte.com)
-- [Cloudflare Pages](https://pages.cloudflare.com) via `@sveltejs/adapter-cloudflare`
+- [SvelteKit 2](https://svelte.dev/docs/kit) + [Svelte 5](https://svelte.dev) (runes mode)
+- [Tailwind CSS 4](https://tailwindcss.com) via `@tailwindcss/vite`
+- [shadcn-svelte](https://shadcn-svelte.com) (bits-ui)
+- [svelte-sonner](https://github.com/wobsoriano/svelte-sonner) (toast notifications)
+- [Cloudflare Workers](https://workers.cloudflare.com) via `@sveltejs/adapter-cloudflare`
 
 ## Privacy
 
-All processing happens entirely in your browser. No data is sent to any server. Profiles are optionally cached in `localStorage` for convenience. Passwords and sensitive tokens in command strings are masked with asterisks in preview cards — the editor textarea shows actual values since you need to edit them.
+All processing happens entirely in your browser. No data is sent to any server. Profiles are cached in `localStorage` with auto-save and auto-restore. Passwords and sensitive tokens in command strings are masked with asterisks in preview cards — the editor textarea shows actual values since you need to edit them. A `beforeunload` warning prevents accidental data loss when closing the tab.
 
 ## License
 
